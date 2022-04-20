@@ -90,7 +90,7 @@ const requestListener = async (req, res) => {
       })
     );
     res.end();
-  } else if (req.url.startsWith("/posts/") && req.method == "PATH") {
+  } else if (req.url.startsWith("/posts/") && req.method == "PATCH") {
     req.on("end", async () => {
       try {
         //提取輸入內容
