@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "1a596320-903a-4612-b1bf-2bd387b11dab",
+		"name": "Hotel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "取得POSTS",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://cryptic-harbor-23940.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"cryptic-harbor-23940",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "發送POSTS",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Mike\",\r\n    \"content\":\"哈囉你好嗎\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://cryptic-harbor-23940.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"cryptic-harbor-23940",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除POSTS",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://cryptic-harbor-23940.herokuapp.com/posts/",
+					"protocol": "https",
+					"host": [
+						"cryptic-harbor-23940",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "更新POSTS",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "https://cryptic-harbor-23940.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"cryptic-harbor-23940",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
