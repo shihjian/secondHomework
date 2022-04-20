@@ -90,6 +90,38 @@ const requestListener = async (req, res) => {
       })
     );
     res.end();
+  } else if (req.url.startsWith("/posts/") && req.method == "PATH") {
+    req.on("end", async () => {
+      try {
+        //提取輸入內容
+        const data = JSON.parse(body);
+        //抓取ID
+        const id = req.url.split("/").pop();
+        await Post.findByIdAndUpdate(id, {
+          $set: {
+            name: data.name,
+            content: data.content,
+          },
+        });
+        res.writeHead(200, headers);
+        res.write(
+          JSON.stringify({
+            status: "success",
+            data: null,
+          })
+        );
+        res.end();
+      } catch (error) {
+        res.writeHead(400, headers);
+        res.write(
+          JSON.stringify({
+            status: "false",
+            message: error,
+          })
+        );
+        res.end();
+      }
+    });
   } else if (req.method == "OPTIONS") {
     res.writeHead(200, headers);
     res.end();
