@@ -45,7 +45,7 @@ const requestListener = async (req, res) => {
     req.on("end", async () => {
       try {
         const data = JSON.parse(body);
-        if (data.content !== undefined) {
+        if (data.content !== undefined && data.name !== undefined) {
           const newPost = await Post.create({
             name: data.name,
             content: data.content,
@@ -73,7 +73,7 @@ const requestListener = async (req, res) => {
         res.write(
           JSON.stringify({
             status: "false",
-            message: error,
+            message: "姓名與內容為必填欄位",
           })
         );
         res.end();
@@ -81,12 +81,39 @@ const requestListener = async (req, res) => {
     });
   } else if (req.url.startsWith("/posts/") && req.method == "DELETE") {
     const id = req.url.split("/").pop();
-    await Post.findByIdAndDelete(id);
+    const delOne = await Post.findByIdAndDelete(id);
+    // 回掉修改後的資料
+    const post = await Post.findById(id);
+    if (delOne !== null) {
+      res.writeHead(200, headers);
+      res.write(
+        JSON.stringify({
+          status: "success",
+          message: "資料刪除成功",
+          data: post,
+        })
+      );
+      res.end();
+    } else {
+      res.writeHead(400, headers);
+      res.write(
+        JSON.stringify({
+          status: "false",
+          message: "資料刪除失敗",
+        })
+      );
+      res.end();
+    }
+  } else if (req.url == "/posts" && req.method == "DELETE") {
+    await Post.deleteMany({});
+    // 回掉修改後的資料
+    const post = await Post.find();
     res.writeHead(200, headers);
     res.write(
       JSON.stringify({
         status: "success",
-        data: null,
+        message: "資料刪除成功",
+        data: post,
       })
     );
     res.end();
@@ -97,20 +124,49 @@ const requestListener = async (req, res) => {
         const data = JSON.parse(body);
         //抓取ID
         const id = req.url.split("/").pop();
-        await Post.findByIdAndUpdate(id, {
-          $set: {
-            name: data.name,
-            content: data.content,
-          },
-        });
-        res.writeHead(200, headers);
-        res.write(
-          JSON.stringify({
-            status: "success",
-            data: null,
-          })
-        );
-        res.end();
+        if (data.name !== undefined && data.content !== undefined) {
+          const updatePost = await Post.findByIdAndUpdate(
+            id,
+            {
+              $set: {
+                name: data.name,
+                content: data.content,
+              },
+            },
+            { new: true }
+          );
+          if (updatePost !== null) {
+            // 回掉修改後的資料
+            const post = await Post.findById(id);
+            res.writeHead(200, headers);
+            res.write(
+              JSON.stringify({
+                status: "success",
+                message: "內容修改成功",
+                data: post,
+              })
+            );
+            res.end();
+          } else {
+            res.writeHead(400, headers);
+            res.write(
+              JSON.stringify({
+                status: "false",
+                message: "內容修改失敗",
+              })
+            );
+            res.end();
+          }
+        } else {
+          res.writeHead(400, headers);
+          res.write(
+            JSON.stringify({
+              status: "false",
+              message: "姓名與內容為必填欄位",
+            })
+          );
+          res.end();
+        }
       } catch (error) {
         res.writeHead(400, headers);
         res.write(
